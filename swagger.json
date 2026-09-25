@@ -1,0 +1,311 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Music School API",
+    "version": "1.0.0",
+    "description": "REST API for managing music school students and lessons."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/students": {
+      "get": {
+        "summary": "Get all students",
+        "responses": {
+          "200": {
+            "description": "Students retrieved successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a student",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Student"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Student created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/students/{id}": {
+      "get": {
+        "summary": "Get a student",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Student found"
+          },
+          "400": {
+            "description": "Invalid ID"
+          },
+          "404": {
+            "description": "Student not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a student",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Student"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Student updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Student not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a student",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Student deleted"
+          },
+          "400": {
+            "description": "Invalid ID"
+          },
+          "404": {
+            "description": "Student not found"
+          }
+        }
+      }
+    },
+    "/lessons": {
+      "get": {
+        "summary": "Get all lessons",
+        "responses": {
+          "200": {
+            "description": "Lessons retrieved successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a lesson",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Lesson"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Lesson created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lessons/{id}": {
+      "get": {
+        "summary": "Get a lesson",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lesson found"
+          },
+          "400": {
+            "description": "Invalid ID"
+          },
+          "404": {
+            "description": "Lesson not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a lesson",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Lesson"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Lesson updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Lesson not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a lesson",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Lesson deleted"
+          },
+          "400": {
+            "description": "Invalid ID"
+          },
+          "404": {
+            "description": "Lesson not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "Student": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "age",
+          "instrument",
+          "level",
+          "parentName",
+          "phone"
+        ],
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "instrument": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string"
+          },
+          "parentName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      },
+      "Lesson": {
+        "type": "object",
+        "required": [
+          "studentId",
+          "instrument",
+          "lessonDate",
+          "lessonTime",
+          "duration",
+          "teacher"
+        ],
+        "properties": {
+          "studentId": {
+            "type": "string"
+          },
+          "instrument": {
+            "type": "string"
+          },
+          "lessonDate": {
+            "type": "string"
+          },
+          "lessonTime": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "teacher": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

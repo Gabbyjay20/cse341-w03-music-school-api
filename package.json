@@ -1,0 +1,19 @@
+{
+  "name": "w03-project",
+  "version": "1.0.0",
+  "description": "CSE 341 W03 Music School API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "Gabriel James",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.2",
+    "express": "^5.2.1",
+    "mongodb": "^7.6.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
