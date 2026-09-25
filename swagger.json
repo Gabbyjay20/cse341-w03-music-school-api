@@ -2,21 +2,22 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Music School API",
-    "version": "1.0.0",
-    "description": "REST API for managing music school students and lessons."
+    "description": "REST API for managing music school students and lessons.",
+    "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://cse341-w03-music-school-api.onrender.com"
     }
   ],
   "paths": {
     "/students": {
       "get": {
         "summary": "Get all students",
+        "tags": ["Students"],
         "responses": {
           "200": {
-            "description": "Students retrieved successfully"
+            "description": "List of all students"
           },
           "500": {
             "description": "Server error"
@@ -25,6 +26,7 @@
       },
       "post": {
         "summary": "Create a student",
+        "tags": ["Students"],
         "requestBody": {
           "required": true,
           "content": {
@@ -37,7 +39,7 @@
         },
         "responses": {
           "201": {
-            "description": "Student created"
+            "description": "Student created successfully"
           },
           "400": {
             "description": "Validation error"
@@ -48,9 +50,11 @@
         }
       }
     },
+
     "/students/{id}": {
       "get": {
         "summary": "Get a student",
+        "tags": ["Students"],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -65,11 +69,15 @@
           },
           "404": {
             "description": "Student not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       },
       "put": {
         "summary": "Update a student",
+        "tags": ["Students"],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -87,18 +95,22 @@
         },
         "responses": {
           "204": {
-            "description": "Student updated"
+            "description": "Student updated successfully"
           },
           "400": {
-            "description": "Validation error"
+            "description": "Validation error or invalid ID"
           },
           "404": {
             "description": "Student not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       },
       "delete": {
         "summary": "Delete a student",
+        "tags": ["Students"],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -106,23 +118,28 @@
         ],
         "responses": {
           "204": {
-            "description": "Student deleted"
+            "description": "Student deleted successfully"
           },
           "400": {
             "description": "Invalid ID"
           },
           "404": {
             "description": "Student not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }
     },
+
     "/lessons": {
       "get": {
         "summary": "Get all lessons",
+        "tags": ["Lessons"],
         "responses": {
           "200": {
-            "description": "Lessons retrieved successfully"
+            "description": "List of all lessons"
           },
           "500": {
             "description": "Server error"
@@ -131,6 +148,7 @@
       },
       "post": {
         "summary": "Create a lesson",
+        "tags": ["Lessons"],
         "requestBody": {
           "required": true,
           "content": {
@@ -143,7 +161,7 @@
         },
         "responses": {
           "201": {
-            "description": "Lesson created"
+            "description": "Lesson created successfully"
           },
           "400": {
             "description": "Validation error"
@@ -154,9 +172,11 @@
         }
       }
     },
+
     "/lessons/{id}": {
       "get": {
         "summary": "Get a lesson",
+        "tags": ["Lessons"],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -171,11 +191,15 @@
           },
           "404": {
             "description": "Lesson not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       },
       "put": {
         "summary": "Update a lesson",
+        "tags": ["Lessons"],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -193,18 +217,22 @@
         },
         "responses": {
           "204": {
-            "description": "Lesson updated"
+            "description": "Lesson updated successfully"
           },
           "400": {
-            "description": "Validation error"
+            "description": "Validation error or invalid ID"
           },
           "404": {
             "description": "Lesson not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       },
       "delete": {
         "summary": "Delete a lesson",
+        "tags": ["Lessons"],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -212,29 +240,36 @@
         ],
         "responses": {
           "204": {
-            "description": "Lesson deleted"
+            "description": "Lesson deleted successfully"
           },
           "400": {
             "description": "Invalid ID"
           },
           "404": {
             "description": "Lesson not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }
     }
   },
+
   "components": {
     "parameters": {
       "id": {
         "name": "id",
         "in": "path",
         "required": true,
+        "description": "MongoDB ObjectId",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "example": "6ab4ffed6cf4f34d80f9fefc"
         }
       }
     },
+
     "schemas": {
       "Student": {
         "type": "object",
@@ -250,31 +285,41 @@
         ],
         "properties": {
           "firstName": {
-            "type": "string"
+            "type": "string",
+            "example": "Brandon"
           },
           "lastName": {
-            "type": "string"
+            "type": "string",
+            "example": "James"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "format": "email",
+            "example": "brandon@example.com"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "example": 9
           },
           "instrument": {
-            "type": "string"
+            "type": "string",
+            "example": "Piano"
           },
           "level": {
-            "type": "string"
+            "type": "string",
+            "example": "Beginner"
           },
           "parentName": {
-            "type": "string"
+            "type": "string",
+            "example": "Gabriel James"
           },
           "phone": {
-            "type": "string"
+            "type": "string",
+            "example": "08012345678"
           }
         }
       },
+
       "Lesson": {
         "type": "object",
         "required": [
@@ -287,22 +332,29 @@
         ],
         "properties": {
           "studentId": {
-            "type": "string"
+            "type": "string",
+            "example": "6ab4ffed6cf4f34d80f9fefc"
           },
           "instrument": {
-            "type": "string"
+            "type": "string",
+            "example": "Piano"
           },
           "lessonDate": {
-            "type": "string"
+            "type": "string",
+            "format": "date",
+            "example": "2026-09-25"
           },
           "lessonTime": {
-            "type": "string"
+            "type": "string",
+            "example": "15:00"
           },
           "duration": {
-            "type": "string"
+            "type": "integer",
+            "example": 30
           },
           "teacher": {
-            "type": "string"
+            "type": "string",
+            "example": "Gabriel James"
           }
         }
       }
