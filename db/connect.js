@@ -8,7 +8,9 @@ const initDb = async () => {
     return database;
   }
 
-  const client = new MongoClient(process.env.MONGODB_URI);
+  const client = new MongoClient(process.env.MONGODB_URI, {
+    serverSelectionTimeoutMS: 10000,
+  });
 
   await client.connect();
 
@@ -25,5 +27,5 @@ const getDatabase = () => {
 
 module.exports = {
   initDb,
-  getDatabase
+  getDatabase,
 };

@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Music School API",
-    "description": "REST API for managing music school students and lessons.",
+    "description": "REST API for managing music school students and lessons with GitHub OAuth authentication.",
     "version": "1.0.0"
   },
   "servers": [
@@ -10,23 +10,122 @@
       "url": "https://cse341-w03-music-school-api.onrender.com"
     }
   ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "GitHub OAuth authentication"
+    },
+    {
+      "name": "Students",
+      "description": "Student management endpoints"
+    },
+    {
+      "name": "Lessons",
+      "description": "Lesson management endpoints"
+    }
+  ],
   "paths": {
+    "/auth/github": {
+      "get": {
+        "summary": "Login with GitHub",
+        "description": "Starts the GitHub OAuth authentication process.",
+        "tags": ["Authentication"],
+        "responses": {
+          "302": {
+            "description": "Redirects the user to GitHub for authentication."
+          }
+        }
+      }
+    },
+
+    "/auth/github/callback": {
+      "get": {
+        "summary": "GitHub OAuth callback",
+        "description": "GitHub redirects the user to this endpoint after authentication.",
+        "tags": ["Authentication"],
+        "responses": {
+          "302": {
+            "description": "Redirects to the authenticated user's profile."
+          },
+          "401": {
+            "description": "GitHub authentication failed."
+          }
+        }
+      }
+    },
+
+    "/auth/profile": {
+      "get": {
+        "summary": "Get authenticated user profile",
+        "description": "Returns the profile of the currently authenticated GitHub user.",
+        "tags": ["Authentication"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authenticated user profile returned successfully."
+          },
+          "401": {
+            "description": "User is not authenticated."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+
+    "/auth/logout": {
+      "get": {
+        "summary": "Log out",
+        "description": "Logs out the currently authenticated user and destroys the session.",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "Successfully logged out."
+          },
+          "500": {
+            "description": "Unable to log out."
+          }
+        }
+      }
+    },
+
     "/students": {
       "get": {
         "summary": "Get all students",
+        "description": "Returns all students. Authentication is required.",
         "tags": ["Students"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of all students"
+            "description": "List of all students."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       },
+
       "post": {
         "summary": "Create a student",
+        "description": "Creates a new student. Authentication is required.",
         "tags": ["Students"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -39,13 +138,16 @@
         },
         "responses": {
           "201": {
-            "description": "Student created successfully"
+            "description": "Student created successfully."
           },
           "400": {
-            "description": "Validation error"
+            "description": "Validation error."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       }
@@ -54,7 +156,13 @@
     "/students/{id}": {
       "get": {
         "summary": "Get a student",
+        "description": "Returns a single student by MongoDB ObjectId. Authentication is required.",
         "tags": ["Students"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -62,22 +170,32 @@
         ],
         "responses": {
           "200": {
-            "description": "Student found"
+            "description": "Student found."
           },
           "400": {
-            "description": "Invalid ID"
+            "description": "Invalid ID."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
-            "description": "Student not found"
+            "description": "Student not found."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       },
+
       "put": {
         "summary": "Update a student",
+        "description": "Updates an existing student. Authentication is required.",
         "tags": ["Students"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -95,22 +213,32 @@
         },
         "responses": {
           "204": {
-            "description": "Student updated successfully"
+            "description": "Student updated successfully."
           },
           "400": {
-            "description": "Validation error or invalid ID"
+            "description": "Validation error or invalid ID."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
-            "description": "Student not found"
+            "description": "Student not found."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       },
+
       "delete": {
         "summary": "Delete a student",
+        "description": "Deletes an existing student. Authentication is required.",
         "tags": ["Students"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -118,16 +246,19 @@
         ],
         "responses": {
           "204": {
-            "description": "Student deleted successfully"
+            "description": "Student deleted successfully."
           },
           "400": {
-            "description": "Invalid ID"
+            "description": "Invalid ID."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
-            "description": "Student not found"
+            "description": "Student not found."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       }
@@ -136,19 +267,35 @@
     "/lessons": {
       "get": {
         "summary": "Get all lessons",
+        "description": "Returns all lessons. Authentication is required.",
         "tags": ["Lessons"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of all lessons"
+            "description": "List of all lessons."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       },
+
       "post": {
         "summary": "Create a lesson",
+        "description": "Creates a new lesson. Authentication is required.",
         "tags": ["Lessons"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -161,13 +308,16 @@
         },
         "responses": {
           "201": {
-            "description": "Lesson created successfully"
+            "description": "Lesson created successfully."
           },
           "400": {
-            "description": "Validation error"
+            "description": "Validation error."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       }
@@ -176,7 +326,13 @@
     "/lessons/{id}": {
       "get": {
         "summary": "Get a lesson",
+        "description": "Returns a single lesson by MongoDB ObjectId. Authentication is required.",
         "tags": ["Lessons"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -184,22 +340,32 @@
         ],
         "responses": {
           "200": {
-            "description": "Lesson found"
+            "description": "Lesson found."
           },
           "400": {
-            "description": "Invalid ID"
+            "description": "Invalid ID."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
-            "description": "Lesson not found"
+            "description": "Lesson not found."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       },
+
       "put": {
         "summary": "Update a lesson",
+        "description": "Updates an existing lesson. Authentication is required.",
         "tags": ["Lessons"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -217,22 +383,32 @@
         },
         "responses": {
           "204": {
-            "description": "Lesson updated successfully"
+            "description": "Lesson updated successfully."
           },
           "400": {
-            "description": "Validation error or invalid ID"
+            "description": "Validation error or invalid ID."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
-            "description": "Lesson not found"
+            "description": "Lesson not found."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       },
+
       "delete": {
         "summary": "Delete a lesson",
+        "description": "Deletes an existing lesson. Authentication is required.",
         "tags": ["Lessons"],
+        "security": [
+          {
+            "sessionAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -240,16 +416,19 @@
         ],
         "responses": {
           "204": {
-            "description": "Lesson deleted successfully"
+            "description": "Lesson deleted successfully."
           },
           "400": {
-            "description": "Invalid ID"
+            "description": "Invalid ID."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
-            "description": "Lesson not found"
+            "description": "Lesson not found."
           },
           "500": {
-            "description": "Server error"
+            "description": "Server error."
           }
         }
       }
@@ -257,6 +436,15 @@
   },
 
   "components": {
+    "securitySchemes": {
+      "sessionAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "Authentication is handled through the Express session after GitHub OAuth login."
+      }
+    },
+
     "parameters": {
       "id": {
         "name": "id",
@@ -361,3 +549,7 @@
     }
   }
 }
+
+
+
+
