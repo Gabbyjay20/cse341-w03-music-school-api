@@ -1,0 +1,12 @@
+const express = require("express");
+const passport = require("passport");
+const router = express.Router();
+const controller = require("../controllers/users");
+const requireAuth = (req, res, next) => req.isAuthenticated() ? next() : res.status(401).json({ message: "Authentication required. Please log in with GitHub." });
+router.use(passport.session());
+router.get("/", requireAuth, controller.getAllUsers);
+router.get("/:id", requireAuth, controller.getSingleUser);
+router.post("/", requireAuth, controller.createUser);
+router.put("/:id", requireAuth, controller.updateUser);
+router.delete("/:id", requireAuth, controller.deleteUser);
+module.exports = router;

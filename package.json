@@ -4,7 +4,8 @@
   "description": "CSE 341 W03 Music School API",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test"
   },
   "keywords": [],
   "author": "Gabriel James",

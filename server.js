@@ -12,6 +12,8 @@ const { initDb } = require("./db/connect");
 const studentsRoutes = require("./routes/students");
 const lessonsRoutes = require("./routes/lessons");
 const authRoutes = require("./routes/auth");
+const teachersRoutes = require("./routes/teachers");
+const usersRoutes = require("./routes/users");
 
 const app = express();
 
@@ -23,12 +25,14 @@ app.use(express.json());
 // Session configuration
 app.use(
   session({
+    name: "connect.sid",
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: false,
       httpOnly: true,
+      sameSite: "lax",
       maxAge: 1000 * 60 * 60,
     },
   })
@@ -42,7 +46,14 @@ app.use(passport.session());
 app.use(
   "/api-docs",
   swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument)
+  swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+      requestInterceptor: (request) => {
+        request.credentials = "include";
+        return request;
+      }
+    }
+  })
 );
 
 // Authentication routes
@@ -51,6 +62,8 @@ app.use("/auth", authRoutes);
 // Existing API routes
 app.use("/students", studentsRoutes);
 app.use("/lessons", lessonsRoutes);
+app.use("/teachers", teachersRoutes);
+app.use("/users", usersRoutes);
 
 // Start server after connecting to MongoDB
 initDb()
